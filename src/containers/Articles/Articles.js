@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import { loadArticles } from '../../actions';
+import { getArticlesList } from '../../reducers';
 // import './Articles.css';
 import Article from '../../components/Article/Article.js';
 
@@ -48,8 +49,7 @@ Articles.propTypes =  {
 
 export default connect(
   state => ({
-    // TODO articlesListByDate
-    articles: Object.values(state.articles.data)
+    articles: getArticlesList(state)
   }),
   {
     loadArticles
