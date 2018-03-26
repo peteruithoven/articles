@@ -1,58 +1,35 @@
 import { combineReducers } from 'redux';
 import * as actions from '../actions';
-
-function articles(state = {}, action = {}) {
-  switch (action.type) {
-    case actions.LOAD_ARTICLES_SUCCESS:
-      return {
-        ...state,
-        ...action.payload
-      }
-    default:
-      return state;
-  }
-}
-
-function pagination(state = {
-  isFetching: false,
-  ids: [],
-  error: null
-}, action = {}) {
-  switch (action.type) {
-    case actions.LOAD_ARTICLES_REQUEST:
-      return {
-        ...state,
-        isFetching: true,
-        // ids: [],
-        error: null
-      }
-    case actions.LOAD_ARTICLES_SUCCESS:
-      return {
-        ...state,
-        isFetching: false,
-        // TODO verify by date sorting
-        ids: Object.keys(action.payload),
-        error: null
-      }
-    case actions.LOAD_ARTICLES_FAILURE:
-      return {
-        ...state,
-        isFetching: false,
-        ids: [],
-        error: action.payload
-      }
-    default:
-      return state
-  }
-}
+import articles from './articles.js';
+import paginate from './paginate.js';
+import * as constants from '../constants.js';
 
 export default combineReducers({
   entities: combineReducers({
     articles
   }),
-  pagination
+  list: paginate([
+    actions.LOAD_ARTICLES_REQUEST,
+    actions.LOAD_ARTICLES_SUCCESS,
+    actions.LOAD_ARTICLES_FAILURE
+  ]),
+  search: paginate([
+    actions.SEARCH_REQUEST,
+    actions.SEARCH_SUCCESS,
+    actions.SEARCH_FAILURE
+  ])
 })
 
+// selectors
 export function getArticlesList(state) {
-  return state.pagination.ids.map(id => state.entities.articles[id]);
+  return state.list.ids.map(id => state.entities.articles[id]);
+}
+export function getNumArticlesPages(state) {
+  return Math.ceil(state.list.totalResults / constants.NUM_ARTICLES_PER_PAGE)
+}
+export function getArticle(state, id) {
+  return state.entities.articles[id];
+}
+export function getSearchResults(state) {
+  return state.search.ids.map(id => state.entities.articles[id]);
 }

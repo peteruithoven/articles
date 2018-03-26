@@ -1,15 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import injectSheet from 'react-jss'
+import styles from './style.js';
 
-const Article = ({title, description}) => {
+const Article = ({ title, description, publishedAt, footerLink, classes }) => {
   return (
-    <article>
-      <header>
-        <h2>{title}</h2>
+    <article className={classes.article}>
+      <header className={classes.header}>
+        <h2 className={classes.title}>{title}</h2>
+        <div className={classes.date}>{formatDate(new Date(publishedAt))}</div>
       </header>
-      <section>
-        {description}
+      <section className={classes.description}>
+        <p>{description}</p>
       </section>
+      <footer className={classes.footer}>
+        {footerLink}
+      </footer>
     </article>
   )
 }
@@ -17,6 +23,16 @@ const Article = ({title, description}) => {
 Article.propTypes =  {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  publishedAt: PropTypes.string.isRequired,
+  footerLink: PropTypes.node.isRequired,
 }
 
-export default Article;
+function formatDate(date) {
+  return date.toLocaleDateString(undefined, {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+}
+
+export default injectSheet(styles)(Article);

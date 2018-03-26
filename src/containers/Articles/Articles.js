@@ -1,45 +1,51 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import { loadArticles } from '../../actions';
-import { getArticlesList } from '../../reducers';
+import { getArticlesList, getNumArticlesPages } from '../../reducers';
 // import './Articles.css';
 import Article from '../../components/Article/Article.js';
+import injectSheet from 'react-jss'
+import styles from './style.js';
 
 class Articles extends Component {
   componentDidMount() {
     const { page, loadArticles } = this.props;
-    console.log('page: ', page);
     loadArticles(page);
   }
   componentWillReceiveProps(nextProps) {
     const { page, loadArticles } = this.props;
-    console.log('page: ', page);
     if (page !== nextProps.page) {
       loadArticles(nextProps.page);
     }
   }
   render() {
-    console.log('Articles');
-    const { articles, page } = this.props;
-    const hasNext = page > 1;
+    const { articles, numPages, page, classes } = this.props;
+    const hasNewer = page > 1;
+    const hasOlder = page < numPages;
     return (
-      <section>
-        <main className="Articles">
-          {articles.length > 0 && articles.map(({id, title, description}) => (
+      <Fragment>
+        <div>
+          {articles.map(article => (
             <Article
-              key={id}
-              title={title}
-              description={description}
+              key={article.id}
+              {...article}
+              footerLink={
+                <Link to={`/article/${article.id}`}>{"Read more >>"}</Link>
+              }
             />
           ))}
-        </main>
-        <footer>
-          <Link to={`/${page+1}`}>Previous articles</Link>
-          {hasNext && <Link to={`/${Math.max(page-1, 1)}`}>Next articles</Link>}
+        </div>
+        <footer className={classes.footer}>
+          <div>
+            {hasOlder && <Link to={`/${page+1}`} >{'<< Older articles'}</Link>}
+          </div>
+          <div>
+            {hasNewer && <Link to={`/${page-1}`}>{'Newer articles >>'}</Link>}
+          </div>
         </footer>
-      </section>
+      </Fragment>
     );
   }
 }
@@ -49,9 +55,10 @@ Articles.propTypes =  {
 
 export default connect(
   state => ({
-    articles: getArticlesList(state)
+    articles: getArticlesList(state),
+    numPages: getNumArticlesPages(state)
   }),
   {
     loadArticles
   }
-)(Articles);
+)(injectSheet(styles)(Articles));

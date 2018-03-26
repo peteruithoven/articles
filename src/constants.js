@@ -1,1 +1,2 @@
-export const PAGE_SIZE = 5;
+export const NUM_ARTICLES_PER_PAGE = 5;
+export const NUM_SEARCH_RESULTS_PER_PAGE = 10;
