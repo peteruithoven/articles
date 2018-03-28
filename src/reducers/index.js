@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import arrayMemoizer from '../utils/arrayMemoizer.js';
 import * as actions from '../actions';
 import articles from './articles.js';
 import paginate from './paginate.js';
@@ -21,15 +22,14 @@ export default combineReducers({
 })
 
 // selectors
-export function getArticlesList(state) {
-  return state.list.ids.map(id => state.entities.articles[id]);
-}
-export function getNumArticlesPages(state) {
-  return Math.ceil(state.list.totalResults / constants.NUM_ARTICLES_PER_PAGE)
-}
-export function getArticle(state, id) {
-  return state.entities.articles[id];
-}
-export function getSearchResults(state) {
-  return state.search.ids.map(id => state.entities.articles[id]);
-}
+const getArticles = state => state.entities.articles;
+export const getArticle = (state, id) => getArticles(state)[id];
+export const getArticlesList = arrayMemoizer(state => (
+  state.list.ids.map(id => getArticle(state, id))
+));
+export const getNumArticlesPages = state => (
+  Math.ceil(state.list.totalResults / constants.NUM_ARTICLES_PER_PAGE)
+)
+export const getSearchResults = arrayMemoizer(state => (
+  state.search.ids.map(id => getArticle(state, id))
+));
