@@ -35,6 +35,7 @@ export default function paginate(types) {
           ...state,
           isFetching: false,
           ids: [],
+          totalResults: 0,
           error: action.payload
         }
       default:
