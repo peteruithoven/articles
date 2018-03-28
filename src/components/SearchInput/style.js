@@ -1,6 +1,14 @@
 import * as theme from '../../theme.js';
 
 export default {
+  form: {
+    position: 'relative'
+  },
+  loader: {
+    position: 'absolute',
+    right: '1.3rem',
+    top: '50%'
+  },
   input: {
     background: '#fff',
     boxShadow: 'none',

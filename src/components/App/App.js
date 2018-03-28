@@ -12,7 +12,7 @@ class App extends Component {
     return (
       <Router>
         <section className={classes.container}>
-          <main>
+          <main className={classes.main}>
             <Switch>
               <Route path="/article/:id" component={ArticleRoute} />
               <Route path="/:page?" component={ArticlesRoute} />

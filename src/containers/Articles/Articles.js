@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
+import Loader from "react-loader";
+import injectSheet from 'react-jss'
 import { loadArticles } from '../../actions';
 import { getArticlesList, getNumArticlesPages } from '../../reducers';
-// import './Articles.css';
 import Article from '../../components/Article/Article.js';
-import injectSheet from 'react-jss'
 import styles from './style.js';
 
 class Articles extends Component {
@@ -21,12 +21,12 @@ class Articles extends Component {
     }
   }
   render() {
-    const { articles, numPages, page, classes } = this.props;
+    const { articles, isFetching, numPages, page, classes } = this.props;
     const hasNewer = page > 1;
     const hasOlder = page < numPages;
     return (
       <Fragment>
-        <div>
+        <div className={classes.list}>
           {articles.map(article => (
             <Article
               key={article.id}
@@ -36,6 +36,7 @@ class Articles extends Component {
               }
             />
           ))}
+          <Loader loaded={!isFetching} />
         </div>
         <footer className={classes.footer}>
           <div>
@@ -49,6 +50,7 @@ class Articles extends Component {
     );
   }
 }
+
 Articles.propTypes =  {
   page: PropTypes.number.isRequired
 }
@@ -56,6 +58,7 @@ Articles.propTypes =  {
 export default connect(
   state => ({
     articles: getArticlesList(state),
+    isFetching: state.list.isFetching,
     numPages: getNumArticlesPages(state)
   }),
   {

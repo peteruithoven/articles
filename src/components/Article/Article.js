@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss'
 import styles from './style.js';
 
-const Article = ({ title, description, publishedAt, footerLink, classes }) => {
+const Article = ({ title, description, publishedAt, footerLink, classes, style }) => {
   return (
-    <article className={classes.article}>
+    <article className={classes.article} style={style}>
       <header className={classes.header}>
         <h2 className={classes.title}>{title}</h2>
         <div className={classes.date}>{formatDate(new Date(publishedAt))}</div>

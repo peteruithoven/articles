@@ -22,9 +22,12 @@ export default {
     marginRight: 'auto',
     width: '50rem'
   },
+  main: {
+    flex: 'auto'
+  },
   sidebar: {
     margin: [theme.spacing, 0, 0, theme.spacing],
-    maxWidth: '18rem',
-    minWidth: '18rem'
+    width: '18rem',
+    flex: 'none'
   }
 }
