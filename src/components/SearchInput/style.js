@@ -10,8 +10,7 @@ export default {
     top: '50%'
   },
   input: {
-    background: '#fff',
-    boxShadow: 'none',
+    background: 'transparent',
     border: theme.border,
     boxSizing: 'border-box',
     padding: theme.boxPadding,
